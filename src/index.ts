@@ -7,10 +7,6 @@ const clientKey = getInput('api-key');
 
 const context: Record<string, string> = {};
 const contextLines = getMultilineInput('context');
-// contextLines?.forEach((l) => {
-//     let keyVal = l.split('=');
-//     context[keyVal[0]] = keyVal[1];
-// });
 for (const line of contextLines) {
   const kvp = line.split('=');
   context[kvp[0]] = kvp[1];

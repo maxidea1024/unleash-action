@@ -26,10 +26,10 @@ interface Payload {
 }
 
 export class Metrics {
-  private appName: string;
-  private url: string;
-  private clientKey: string;
-  private headerName: string;
+  private readonly appName: string;
+  private readonly url: string;
+  private readonly clientKey: string;
+  private readonly headerName: string;
   private bucket: Bucket;
 
   constructor(options: MetricsOptions) {
@@ -88,7 +88,7 @@ export class Metrics {
     }
   }
 
-  private assertBucket(name: string) {
+  private ensureBucket(name: string) {
     if (!this.bucket.toggles[name]) {
       this.bucket.toggles[name] = {
         yes: 0,
@@ -103,7 +103,8 @@ export class Metrics {
   }
 
   async count(featureName: string, enabled: boolean): Promise<void> {
-    this.assertBucket(featureName);
+    this.ensureBucket(featureName);
+
     this.bucket.toggles[featureName][enabled ? 'yes' : 'no']++;
   }
 
@@ -111,7 +112,8 @@ export class Metrics {
     featureName: string,
     variant: string,
   ): Promise<void> {
-    this.assertBucket(featureName);
+    this.ensureBucket(featureName);
+
     if (this.bucket.toggles[featureName].variants[variant]) {
       this.bucket.toggles[featureName].variants[variant] += 1;
     } else {
